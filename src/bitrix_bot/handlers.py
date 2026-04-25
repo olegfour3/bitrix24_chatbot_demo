@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime
+import logging
 from typing import Any
 
 from bitrix_bot.client import BitrixClient
@@ -12,6 +13,7 @@ from bitrix_bot.keyboard import (
     build_orders_list_keyboard,
 )
 
+LOGGER = logging.getLogger(__name__)
 SUPPORTED_EVENT_TYPES = {"ONIMBOTV2MESSAGEADD", "ONIMBOTV2COMMANDADD"}
 MODE_MAIN_MENU = "main_menu"
 MODE_ORDERS_LIST = "orders_list"
@@ -234,15 +236,19 @@ def _resolve_response(
 def handle_event(client: BitrixClient, settings: Settings, event: dict[str, Any]) -> bool:
     event_type = _as_string(event.get("type") or event.get("TYPE"))
     if event_type and event_type not in SUPPORTED_EVENT_TYPES:
+        LOGGER.info("Event skipped: unsupported type=%s", event_type)
         return False
 
     dialog_id, incoming_text, command = _extract_message_event_data(event)
     if not dialog_id:
+        LOGGER.info("Event skipped: no dialog_id type=%s", event_type or "unknown")
         return False
 
     normalized_text = incoming_text or ""
     action = _resolve_action(settings, normalized_text, command or "")
     context = _get_dialog_context(dialog_id)
+    prev_mode = context.mode
+    prev_order_id = context.selected_order_id
     reply_text, keyboard = _resolve_response(settings, action, normalized_text, context)
 
     client.send_message(
@@ -250,5 +256,17 @@ def handle_event(client: BitrixClient, settings: Settings, event: dict[str, Any]
         dialog_id=dialog_id,
         message=reply_text,
         keyboard=keyboard,
+    )
+    LOGGER.info(
+        "Event handled: type=%s dialog=%s action=%s mode=%s->%s order=%s->%s text='%s' command='%s'",
+        event_type or "unknown",
+        dialog_id,
+        action,
+        prev_mode,
+        context.mode,
+        prev_order_id or "-",
+        context.selected_order_id or "-",
+        normalized_text.strip()[:80],
+        (command or "").strip()[:80],
     )
     return True

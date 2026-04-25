@@ -62,9 +62,17 @@ def run_polling_loop(client: BitrixClient, settings: Settings) -> None:
             next_offset = result.get("nextOffset")
             if isinstance(next_offset, int):
                 offset = next_offset
+            if events:
+                LOGGER.info(
+                    "Polling batch: fetched=%s next_offset=%s",
+                    len(events),
+                    offset if offset is not None else "-",
+                )
+            duplicate_count = 0
             for event in events:
                 key = _event_key(event, "default")
                 if key in seen_set:
+                    duplicate_count += 1
                     continue
                 if len(seen_queue) == seen_queue.maxlen:
                     dropped = seen_queue.popleft()
@@ -74,8 +82,13 @@ def run_polling_loop(client: BitrixClient, settings: Settings) -> None:
                 if handle_event(client, settings, event):
                     handled_count += 1
 
-            if handled_count:
-                LOGGER.info("Handled %s events", handled_count)
+            if events:
+                LOGGER.info(
+                    "Polling batch result: handled=%s duplicates=%s skipped=%s",
+                    handled_count,
+                    duplicate_count,
+                    max(len(events) - handled_count - duplicate_count, 0),
+                )
         except Exception as exc:  # noqa: BLE001
             LOGGER.exception("Polling iteration failed: %s", exc)
             time.sleep(max(settings.polling_sleep_seconds, 1.0))
