@@ -1,0 +1,31 @@
+---
+description: Обновление документации для Bitrix24 chatbot demo
+---
+
+# Правило обновления документации проекта
+
+## Что обязательно обновлять
+
+При любых изменениях в поведении бота, API-вызовах, payload, env-переменных и командах:
+- обновлять `README.md`;
+- сверять реализацию с документацией Bitrix24 Chat Bots v2;
+- фиксировать в README, как проверить новое поведение.
+
+## Где проверять API-контракты
+
+Перед изменением методов `imbot.v2.*` всегда обращаться:
+- напрямую к официальной документации:
+  https://apidocs.bitrix24.ru/api-reference/chat-bots/chat-bots-v2/index.html
+- либо через `b24-dev-mcp`.
+
+## Файлы, за которыми нужно следить при доработках
+
+- `src/bitrix_bot/config.py`
+- `src/bitrix_bot/client.py`
+- `src/bitrix_bot/poller.py`
+- `src/bitrix_bot/handlers.py`
+- `src/bitrix_bot/keyboard.py`
+- `src/bitrix_bot/main.py`
+- `scripts/register_bot.py`
+- `scripts/unregister_bot.py`
+- `README.md`

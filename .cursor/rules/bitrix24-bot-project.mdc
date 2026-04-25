@@ -1,0 +1,41 @@
+---
+description: Контекст и правила для Bitrix24 chatbot demo
+globs:
+alwaysApply: true
+---
+Проект: `bitrix24_chatbot_demo` — минимальный sync Python-бот для Bitrix24 Chat Bots v2.
+
+Как работает:
+- регистрация/удаление бота отдельными скриптами;
+- runtime через `uv run bitrix-bot`;
+- события читаются через `imbot.v2.Event.get` в fetch/polling режиме;
+- обработка действий в `handlers.py`;
+- отправка сообщений через `imbot.v2.Chat.Message.send`.
+
+Ключевые файлы:
+- `src/bitrix_bot/config.py`
+- `src/bitrix_bot/client.py`
+- `src/bitrix_bot/poller.py`
+- `src/bitrix_bot/handlers.py`
+- `src/bitrix_bot/keyboard.py`
+- `src/bitrix_bot/main.py`
+- `scripts/register_bot.py`
+- `scripts/unregister_bot.py`
+- `README.md`
+
+Обязательное правило при изменении API/методов:
+- перед изменениями сверяться с:
+  https://apidocs.bitrix24.ru/api-reference/chat-bots/chat-bots-v2/index.html
+- если нужна быстрая проверка/уточнение контрактов — использовать `b24-dev-mcp`.
+
+Обязательное правило по документации проекта:
+- при любом изменении логики, команд, env-переменных или payload обязательно обновлять `README.md`.
+
+Технические принципы:
+- проще и короче, без лишних сущностей;
+- не ломать обратную совместимость текущих сценариев;
+- не дублировать логику, а переиспользовать существующие функции.
+
+Критичное ограничение:
+- агент ни при каких обстоятельствах не должен самостоятельно регистрировать или удалять ботов на портале Bitrix24;
+- любые действия через `imbot.v2.Bot.register` и `imbot.v2.Bot.unregister` допускаются только после прямой явной команды пользователя в текущем диалоге.

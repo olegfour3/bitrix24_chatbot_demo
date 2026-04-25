@@ -1,0 +1,39 @@
+---
+description: Правила работы с текущим Bitrix24 chatbot demo
+globs:
+alwaysApply: true
+---
+Этот репозиторий — минимальный синхронный Python-бот для Bitrix24 Chat Bots v2 (incoming webhook + botToken, polling/fetch).
+
+Обязательные правила для любых доработок:
+
+1) Всегда сохранять текущую функциональность бота:
+- стартовое уведомление;
+- skip backlog при старте;
+- обработка `меню`/`/меню`, кнопок `Статус`, `Помощь`, `Время`;
+- echo-ответ на прочие сообщения;
+- регистрация `/меню` при запуске.
+
+2) Перед изменением любого Bitrix API метода, payload или event parsing:
+- сверяться с официальной документацией:
+  https://apidocs.bitrix24.ru/api-reference/chat-bots/chat-bots-v2/index.html
+- или получать актуальные детали через `b24-dev-mcp`.
+
+3) При любом функциональном изменении обязательно обновлять `README.md`:
+- что изменилось;
+- какие переменные/команды затронуты;
+- как воспроизвести и проверить поведение.
+
+4) Поддерживать код простым и коротким:
+- не добавлять лишние абстракции;
+- переиспользовать существующие функции в `src/bitrix_bot`;
+- избегать дублирования ветвлений/логики.
+
+5) Ключевые файлы текущего проекта:
+- `src/bitrix_bot/main.py` — запуск, startup notify, регистрация `/меню`;
+- `src/bitrix_bot/poller.py` — fetch loop, offset, dedup;
+- `src/bitrix_bot/handlers.py` — парсинг событий и бизнес-логика ответов;
+- `src/bitrix_bot/client.py` — вызовы `imbot.v2.*`;
+- `src/bitrix_bot/keyboard.py` — payload клавиатуры;
+- `src/bitrix_bot/config.py` — env + defaults;
+- `scripts/register_bot.py` / `scripts/unregister_bot.py` — lifecycle бота.
