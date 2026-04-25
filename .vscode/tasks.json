@@ -1,0 +1,32 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Bot: Polling run",
+      "type": "shell",
+      "command": "uv run bitrix-bot",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Bot: Register",
+      "type": "shell",
+      "command": "uv run bitrix-register-bot",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Bot: Unregister",
+      "type": "shell",
+      "command": "uv run bitrix-unregister-bot",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    }
+  ]
+}

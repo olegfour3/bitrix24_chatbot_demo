@@ -20,7 +20,7 @@
 ## Полезное
 
 - Ссылка на документацию к API [https://apidocs.bitrix24.ru/api-reference/chat-bots/chat-bots-v2/index.html](https://apidocs.bitrix24.ru/api-reference/chat-bots/chat-bots-v2/index.html)
-- Создание входящего вебхука [https://tochkaresheniy.bitrix24.ru/devops/section/standard/](https://tochkaresheniy.bitrix24.ru/devops/section/standard/)
+- В РФ для создания входящего вебхука неоходимо оформлять отдельную подписку на маркетплейсы. В РБ это бесплатно.
 
 ## Быстрый запуск
 
