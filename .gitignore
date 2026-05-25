@@ -7,6 +7,7 @@ __pycache__/
 
 # Local env with secrets
 .env
+.env.prod
 
 # IDE/local files
 .DS_Store
